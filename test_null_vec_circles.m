@@ -15,26 +15,25 @@ ntry = 1000;
 rad = 0.1;          
 ninc = 16;              % number of inclusions
 
-ctrs = zeros(2,0);    
+ctrs = [];    
 
 for i = 1:ninc
     placed = false;    
     chnkr_i = chunkerfunc(@(t) rad .* circle(t), cparams);
 
     for j = 1:ntry
-        tmp = (L - 2*rad) * (rand(2,1) - 0.5);
+        tmp = (L - 2*rad) * (rand(2,1) );
         if isempty(ctrs)
             dist_ok = true;
         else
-            % Euclidean distances to existing centers
-             dists = sqrt(sum((ctrs - tmp).^2, 1));
+             dists = vecnorm(tmp - ctrs);
              dist_ok = all(dists > 2*rad); 
         end
 
         if dist_ok
-           chnkr_i = chnkr_i.move([],tmp );
+           chnkr_i = chnkr_i.move([],tmp);
            chnkr_int = [chnkr_int, chnkr_i];
-           ctrs(:,end+1) = tmp;
+           ctrs =[ctrs, tmp];
            placed = true;
            break
         end
@@ -48,6 +47,9 @@ end
 
 
 chnkrs = merge(chnkr_int);
+
+
+
 
 fkern = @(s,t) chnk.lap2d.kern(s,t,'sprime');
 
@@ -68,13 +70,11 @@ r2 = chnkrs.r(1,:).';
 msure_wts = chunkerintegral(chnkrs, rho.*r2);
 
 
-%%
-L = max(abs(chnkrs.r),[],"all");
 
 
 
 
-x1 = linspace(-L-0.15, L + 0.15 ,500);
+x1 = linspace(-0.2, 1.4 ,500);
 [xx,yy] = meshgrid(x1,x1);
 targets = [xx(:).'; yy(:).'];
                     % generate some targets to evaluate the eigenfunctions

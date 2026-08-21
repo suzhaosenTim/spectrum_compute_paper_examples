@@ -16,12 +16,15 @@ t1 = toc(start);
 
 fprintf('%5.2e s : time to build geo\n',t1)
 
-chnkr1 = chnkr.move([], [3;1]);
+chnkr1 = chnkr.move([], [2.65;0]);
 
 chnkr_int = [chnkr, chnkr1];
 
 chnkrs = merge(chnkr_int);
 
+plot(chnkrs)
+
+axis equal
 
 
 fkern = @(s,t) chnk.lap2d.kern(s,t,'sprime');
@@ -63,7 +66,7 @@ ninc = length(chnkr_int);
 
     lhs = 0.5.*eye(chnkrs.npt) + sysmat + stb ;     % left hand side
 
-    src = [3;-1];
+    src = [3;-2];
     [~,grad] = chnk.lap2d.green(src,chnkrs.r,true);
 
     nx = chnkrs.n(1,:);
@@ -98,11 +101,11 @@ fprintf('%5.2e s : time to evaluate\n',t4)
 
 
 val1 = chnk.lap2d.green(src, [0;0]);
-val2 = chnk.lap2d.green(src, [3;1]);
+val2 = chnk.lap2d.green(src, [2.65;0]);
 
 solin_t_1 = chunkerkerneval(chnkrs,skern,rho,[0;0]);
 
-solin_t_2 = chunkerkerneval(chnkrs,skern,rho,[3;1]);
+solin_t_2 = chunkerkerneval(chnkrs,skern,rho,[2.65;0]);
 
 sol_N =solin_1 - (solin_t_1 - val1);
 sol_N2 = solin_2 - (solin_t_2 - val2);                  % manual subtraction 
@@ -123,7 +126,7 @@ uerr = reshape(uerr,size(xx));
 
 
 
-rhs2 = -chnkrs.n(2,:).';                                % test for the high contrast computation
+rhs2 = -chnkrs.n(1,:).';                                % test for the high contrast computation
 
 start = tic; 
 rho2 = lhs\rhs2;
@@ -152,8 +155,8 @@ curr = nan(2,size(xx(:),1));
 E_solin = chunkerkerneval(chnkrs,kern_grad,rho2,targets(:,in));
 E_solout = chunkerkerneval(chnkrs,kern_grad,rho2,targets(:,out)) ;
 
-uugrad(:,in(:)) = (reshape(E_solin,2,[]) + [0;1]);
-uugrad(:,out(:)) = (reshape(E_solout,2,[]) + [0;1]);
+uugrad(:,in(:)) = (reshape(E_solin,2,[]) + [1;0]);
+uugrad(:,out(:)) = (reshape(E_solout,2,[]) + [1;0]);
 telec = toc(tstart);
 fprintf('%5.2e s : Evaluate the electric field \n',telec)
 

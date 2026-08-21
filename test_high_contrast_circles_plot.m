@@ -23,12 +23,11 @@ for i = 1:ninc
     chnkr_i = refine(chnkr_i, struct('nover',1));
 
     for j = 1:ntry
-        tmp = (L - 2*rad) * (rand(2,1) - 0.5);
+        tmp = (L - 2*rad)*rand(2,1);
         if isempty(ctrs)
             dist_ok = true;
         else
-            % Euclidean distances to existing centers
-             dists = sqrt(sum((ctrs - tmp).^2, 1));
+             dists = vecnorm(tmp - ctrs);
              dist_ok = all(dists > 2*rad); 
         end
 
@@ -88,9 +87,9 @@ lhs = 0.5.*eye(chnkrs.npt) + sysmat + stb ;
 
 
 
-L = max(abs(chnkrs.r),[],"all");
 
-x1 = linspace(-L-0.15, L + 0.15 ,500);
+
+x1 = linspace(-0.2, 1.4 ,500);
 [xx,yy] = meshgrid(x1,x1);
 targets = [xx(:).'; yy(:).'];
 
@@ -243,4 +242,4 @@ end
 
 set(fig,'Position',[100 100 1300 500])
 
-%exportgraphics(gcf,'high contrast circles.pdf','ContentType','vector')
+exportgraphics(gcf,'high contrast circles.pdf','ContentType','vector')
