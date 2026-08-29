@@ -10,7 +10,7 @@ cparams.eps = 1.0e-6;
 cparams.nover = 0;
 
 chnkr_int = [];
-L = 1.5;                % domain size (square box (2x 2))
+L = 1.5;                % domain size 
 ntry = 1000;          
 rad = 0.1;          
 ninc = 16;              % number of inclusions
@@ -22,7 +22,7 @@ for i = 1:ninc
     chnkr_i = chunkerfunc(@(t) rad .* circle(t), cparams);
 
     for j = 1:ntry
-        tmp = (L - 2*rad) * (rand(2,1) );
+        tmp = (L - 2*rad) * rand(2,1) ;
         if isempty(ctrs)
             dist_ok = true;
         else
@@ -74,10 +74,10 @@ msure_wts = chunkerintegral(chnkrs, rho.*r2);
 
 
 
-x1 = linspace(-0.2, 1.4 ,500);
+x1 = linspace(-0.2, 1.4 ,500);               % generate some targets to evaluate the eigenfunctions
 [xx,yy] = meshgrid(x1,x1);
 targets = [xx(:).'; yy(:).'];
-                    % generate some targets to evaluate the eigenfunctions
+                   
 
 in = chunkerinterior(chnkrs, targets);              % identify interior and exterior (there is a hacky way to do this via FMM)
 out = ~in;

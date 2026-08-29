@@ -10,10 +10,10 @@ cparams.maxchunklen = 0.5;
 
 
 
-rad = 0.1;        % circle radius
+rad = 0.1;           
 nx  = 4;             % number of circles in x-direction
-ny  = 4;             % number of circles in y-direction
-                     % ninc = nx*ny
+ny  = 4;             % number of circles in y-direction (ninc = nx * ny)
+                     
 spacing = 0.2556;   
 
 
@@ -26,21 +26,19 @@ chnkrorg = chunkerfunc(@(t) rad.*circle(t), cparams);
 
 
 chnkr_int = [];
-ctrs = zeros(2,0);
+
 n_pts = [];
 
 for x = 1:nx
     chnkr_i = chunkerfunc(@(t) rad.*circle(t), cparams);
     for y = 1:ny
-        % Grid center position
+
         cx = -Lx/2 + (x-1)*spacing;
         cy = -Ly/2 + (y-1)*spacing;
-
-        % Place the circle
+        
         chnkr_i = chnkrorg.move([], [cx; cy]);
 
         chnkr_int = [chnkr_int, chnkr_i];
-        ctrs(:,end+1) = [cx; cy];
     end
 end
 
