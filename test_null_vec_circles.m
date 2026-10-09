@@ -5,6 +5,7 @@ clear
 iseed = 8675309;
 rng(iseed,'twister');
 
+
 cparams = [];
 cparams.eps = 1.0e-6;
 cparams.nover = 0;
@@ -51,10 +52,12 @@ chnkrs = merge(chnkr_int);
 
 
 
+
 fkern = @(s,t) chnk.lap2d.kern(s,t,'sprime');
 
 opts = []; 
 opts.sing = 'log';
+opts.adaptive_correction= true; % use adaptive quadrature to handle near touching panels.
 
 start = tic;
 sysmat = chunkermat(chnkrs, fkern, opts);
@@ -72,9 +75,9 @@ msure_wts = chunkerintegral(chnkrs, rho.*r2);
 
 
 
+L = max(vecnorm(chnkrs.r(:,:)));
 
-
-x1 = linspace(-0.2, 1.4 ,500);               % generate some targets to evaluate the eigenfunctions
+x1 = linspace(-0.5, 2.5 ,500);               % generate some targets to evaluate the eigenfunctions
 [xx,yy] = meshgrid(x1,x1);
 targets = [xx(:).'; yy(:).'];
                    
@@ -105,6 +108,8 @@ str_plot = nan(size(xx));
 str_plot(in) = sqrt(strE(1,:).^2 + strE(2,:).^2); 
 str_plot(out) = sqrt(strE_out(1,:).^2 + strE_out(2,:).^2); 
 
+
+
 fig = figure;
 clf
 
@@ -120,7 +125,7 @@ hold on
 plot(chnkrs,'k')
 xlabel('x-axis', 'FontSize',12)
 ylabel('y-axis', 'FontSize',12)
-title('Gamma operator eigenfunction ', 'FontSize',12)
+title('Eigenfunction (Linear scaled absolute value) ', 'FontSize',12)
 axis equal
 colorbar
 pbaspect([1 1 1]) 
@@ -132,15 +137,15 @@ hold on
 plot(chnkrs,'k')
 xlabel('x-axis', 'FontSize',12)
 ylabel('y-axis', 'FontSize',12)
-title('log scale Gamma operator eigenfunction', 'FontSize',12)
+title('Eigenfunction (Log scaled absolute value)', 'FontSize',12)
 axis equal
 colorbar
 pbaspect([1 1 1]) 
 
-
-
-
 set(gcf,'Position', [900  500  900   500])
 
+
+
+% 
 exportgraphics(gcf,'null_vector_unordered.pdf','ContentType','vector',...
     'Resolution',600)
