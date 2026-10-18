@@ -15,9 +15,9 @@ start = tic; chnkr = chunkerfunc(@(t) starfish(t,narms,amp), cparams);
 t1 = toc(start);
 
 fprintf('%5.2e s : time to build geo\n',t1)
-chnkr = refine(chnkr, struct('nover',2));
 
-chnkr1 = chnkr.move([], [2.56;0]);
+chnkr1 = chnkr.move([], [2.65;0]);
+
 
 chnkr_int = [chnkr, chnkr1];
 
@@ -154,10 +154,11 @@ tstart = tic;
 uugrad = nan(2,size(xx(:),1));
 curr = nan(2,size(xx(:),1));
 
+opts1 = [];
+opts1.forceadap = false;
 
-
-E_solin = chunkerkerneval(chnkrs,kern_grad,rho2,targets(:,in));
-E_solout = chunkerkerneval(chnkrs,kern_grad,rho2,targets(:,out)) ;
+E_solin = chunkerkerneval(chnkrs,kern_grad,rho2,targets(:,in), opts1);
+E_solout = chunkerkerneval(chnkrs,kern_grad,rho2,targets(:,out), opts1) ;
 
 uugrad(:,in(:)) = (reshape(E_solin,2,[]) + [1;0]);
 uugrad(:,out(:)) = (reshape(E_solout,2,[]) + [1;0]);
@@ -223,6 +224,6 @@ pbaspect([1 1 1])
 
 set(fig,'Position',[100 100 1300 500])
 
-%exportgraphics(gcf,'high contrast starfish.pdf','ContentType','vector')
+exportgraphics(gcf,'high contrast starfish.pdf','ContentType','vector')
 
 

@@ -10,7 +10,7 @@ cparams.eps = 1.0e-6;
 cparams.nover = 0;
 
 chnkr_int = [];
-L = 1.5;                % domain size (square box (2x 2))
+L = 1.5;                % domain size 
 ntry = 1000;          
 rad = 0.1;          
 ninc = 16;              % number of inclusions
@@ -53,6 +53,8 @@ fkern = @(s,t) chnk.lap2d.kern(s,t,'sprime');
 
 opts = []; 
 opts.sing = 'log';
+opts.adaptive_correction = true;
+
 
 start = tic;
 sysmat = chunkermat(chnkrs, fkern, opts);
@@ -96,7 +98,7 @@ targets = [xx(:).'; yy(:).'];
 
    
 
-rhs2 = -chnkrs.n(2,:).';
+rhs2 = -chnkrs.n(2,:).';                        
 
 start = tic; 
 rho2 = lhs\rhs2;
